@@ -12,8 +12,9 @@ import { getLenis } from "@/lib/scroll";
  *  - [data-build-group] > [data-build="label"]  built when the group scrolls into view
  *
  * Once the opening screen is built, the page scrolls itself from top to bottom (the "tour"),
- * so the agents can be watched building each section. Any scroll, touch, click or key press
- * hands control straight back to the visitor.
+ * so the agents can be watched building each section, and stops at the bottom. Scrolling
+ * yourself (wheel, swipe or scroll keys), the Stop button, or opening a project, the résumé or
+ * the assistant hands control straight back. Every visit starts at the top.
  *
  * Pieces are hidden with clip-path only (never removed from the page), so screen readers and
  * search engines always see the full content. Skipped entirely for reduced motion.
@@ -31,6 +32,7 @@ const AGENTS = [
 ];
 
 const HIDDEN = "inset(0% 100% 0% 0%)";
+const SCROLL_KEYS = new Set(["ArrowDown", "ArrowUp", "PageDown", "PageUp", " ", "Home", "End", "Escape"]);
 
 function cursorEl(name: string, color: string) {
   const c = document.createElement("div");
@@ -163,18 +165,17 @@ export default function AgentBuild() {
       heroTl.call(() => {
         if (!tookOver) setTimeout(startTour, 500);
       });
-      // any input finishes the build at once (and means the visitor wants control)
+      // scrolling yourself finishes the build at once (and means the visitor wants control)
       const skip = () => {
         tookOver = true;
         finishHero();
         window.removeEventListener("wheel", skip);
-        window.removeEventListener("keydown", skip);
-        window.removeEventListener("pointerdown", skip);
+        window.removeEventListener("keydown", skipKey);
         window.removeEventListener("touchmove", skip);
       };
+      const skipKey = (e: KeyboardEvent) => SCROLL_KEYS.has(e.key) && skip();
       window.addEventListener("wheel", skip, { passive: true });
-      window.addEventListener("keydown", skip);
-      window.addEventListener("pointerdown", skip);
+      window.addEventListener("keydown", skipKey);
       window.addEventListener("touchmove", skip, { passive: true });
     };
     // ---------- the tour: scroll top to bottom, pausing while each section is built ----------
@@ -197,15 +198,27 @@ export default function AgentBuild() {
     const startTour = async () => {
       if (tookOver || !getLenis()) return;
       setTouring(true);
-      const inputs = ["wheel", "touchstart", "keydown", "pointerdown"] as const;
+      // only a deliberate scroll (or opening a project, the résumé or the assistant) takes over;
+      // a stray click or tap doesn't
+      const onKey = (e: KeyboardEvent) => SCROLL_KEYS.has(e.key) && stop();
+      const unsub = ui.subscribe(() => {
+        const st = ui.get();
+        if (st.room || st.resumeOpen || st.assistantOpen) stop();
+      });
       const stop = () => {
+        if (cancelled) return;
         cancelled = true;
-        inputs.forEach((t) => window.removeEventListener(t, stop));
+        window.removeEventListener("wheel", stop);
+        window.removeEventListener("touchmove", stop);
+        window.removeEventListener("keydown", onKey);
+        unsub();
         getLenis()?.scrollTo(window.scrollY, { immediate: true, force: true });
         setTouring(false);
       };
       stopTour.current = stop;
-      inputs.forEach((t) => window.addEventListener(t, stop, { passive: true }));
+      window.addEventListener("wheel", stop, { passive: true });
+      window.addEventListener("touchmove", stop, { passive: true });
+      window.addEventListener("keydown", onKey);
 
       const film = document.getElementById("film");
       const steps: { to: () => number | null; speed: number; pause: number }[] = [
@@ -228,8 +241,7 @@ export default function AgentBuild() {
         await wait(s.pause);
       }
       if (!cancelled) {
-        inputs.forEach((t) => window.removeEventListener(t, stop));
-        setTouring(false);
+        stop();
       }
     };
 

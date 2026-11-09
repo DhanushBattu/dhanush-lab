@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ui } from "@/lib/store";
+import { getLenis, lockScroll } from "@/lib/scroll";
 
 const HOLD_MS = 2000; // the entry card stays for 2 seconds
 
@@ -16,11 +17,27 @@ export default function Loader() {
       ui.set({ booted: true });
       return;
     }
+    // every visit starts at the very top (browsers otherwise restore the old scroll position
+    // on reload), and the page can't be scrolled while the entry card is up
+    const deepLink = !!window.location.hash;
+    if (!deepLink) {
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+    }
+    lockScroll(true);
     const end = setTimeout(() => {
+      if (!deepLink) {
+        window.scrollTo(0, 0);
+        getLenis()?.scrollTo(0, { immediate: true, force: true });
+      }
+      lockScroll(false);
       setDone(true);
       ui.set({ booted: true });
     }, HOLD_MS);
-    return () => clearTimeout(end);
+    return () => {
+      clearTimeout(end);
+      lockScroll(false);
+    };
   }, []);
 
   const ease = [0.16, 1, 0.3, 1] as const;
