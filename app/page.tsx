@@ -1,5 +1,6 @@
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import NotebookMotion from "@/components/layout/NotebookMotion";
+import AgentBuild from "@/components/layout/AgentBuild";
 import Loader from "@/components/layout/Loader";
 import Nav from "@/components/layout/Nav";
 import Cursor from "@/components/ui/Cursor";
@@ -27,6 +28,7 @@ export default function Page() {
       </a>
       <SmoothScroll />
       <NotebookMotion />
+      <AgentBuild />
       <BackgroundDust />
       <Loader />
       <Cursor />

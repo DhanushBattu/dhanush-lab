@@ -89,9 +89,9 @@ export default function Lab() {
           </p>
         </div>
 
-        <ul id="lab-rooms" className="mt-10 grid scroll-mt-28 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <ul id="lab-rooms" data-build-group className="mt-10 grid scroll-mt-28 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {rooms.map((r, i) => (
-            <li key={r.title} data-stick>
+            <li key={r.title} data-build={`room · ${r.title}`}>
               <Tilt className="group h-full rounded-[4px]">
                 <button
                   onClick={(e) => openRoom(r.id, e.currentTarget)}

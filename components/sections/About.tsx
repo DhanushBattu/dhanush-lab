@@ -68,9 +68,9 @@ export default function About() {
           kicker="Where I'm from, what I run, and what I do when I'm not building."
         />
 
-        <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 md:mt-16">
+        <ul data-build-group className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 md:mt-16">
           {aboutMe.map((c, i) => (
-            <li key={c.id} data-stick style={{ rotate: tilt[i] }}>
+            <li key={c.id} data-build={`card · ${c.tag}`} style={{ rotate: tilt[i] }}>
               <Tilt max={5} className="group h-full rounded-[3px]">
               <article
                 onPointerEnter={redraw}

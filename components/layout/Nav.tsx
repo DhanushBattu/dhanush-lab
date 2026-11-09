@@ -56,6 +56,7 @@ export default function Nav() {
         className="fixed inset-x-0 top-4 z-50 flex justify-center px-4"
       >
         <nav
+          data-build-hero="nav"
           aria-label="Primary"
           className="flex w-full max-w-[1180px] items-center justify-between rounded-full border border-line-2 bg-ink-2/95 py-2 pl-5 pr-2 shadow-[0_10px_30px_-20px_rgba(40,30,15,.5)]"
         >

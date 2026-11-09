@@ -116,6 +116,7 @@ lib/                  store (UI state), scroll, hooks, resume download, scan tim
 
 - three.js is split out and only loads when the browser supports WebGL. Every canvas pauses when it's off-screen.
 - Phones get fewer particles and a lower pixel ratio, and the skills map becomes a list of tappable chips.
+- **Agent swarm:** after the loading screen, a swarm of "agent" cursors with name tags drag wireframe boxes over the opening screen and each piece appears inside its box. The About and project cards are built the same way as they scroll into view. Any scroll, click or key press finishes it at once (`components/layout/AgentBuild.tsx`).
 - Motion is small and purposeful: the photo print tilts toward the cursor, cards lift and tilt on hover, doodles redraw, text rises in as it scrolls into view, and headings drift with a light parallax. All of it is in `components/layout/NotebookMotion.tsx`, `components/ui/Tilt.tsx` and `components/ui/Magnetic.tsx`.
 - With reduced motion turned on, there is no smooth scrolling, no loader, no tilt or parallax and no animated WebGL; the scroll film becomes a single still frame.
 - Semantic landmarks, a skip link, visible focus states and real buttons throughout. Overlays close with Esc, and the IPL charts include a screen-reader table.

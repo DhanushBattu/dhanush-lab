@@ -85,7 +85,7 @@ export default function Hero() {
       <div className="mx-auto grid max-w-[1400px] items-center gap-x-10 gap-y-10 px-5 pb-10 pt-28 md:px-10 md:pt-32 lg:min-h-[calc(100svh-150px)] lg:grid-cols-12 lg:pb-8">
         {/* ---------- the photo print ---------- */}
         <motion.div style={{ y: printY, rotate: printR }} className="relative mx-auto w-full max-w-[560px] lg:order-2 lg:col-span-6 lg:col-start-7">
-          <motion.div style={{ rotateX: tiltX, rotateY: tiltY, transformPerspective: 1100 }}>
+          <motion.div data-build-hero="photo" style={{ rotateX: tiltX, rotateY: tiltY, transformPerspective: 1100 }}>
           <motion.div {...print} className="sheet relative bg-[#fbf8f1] p-2.5 pb-12 sm:p-3 sm:pb-14">
             <span className="tape -left-6 -top-3 rotate-[-28deg]" />
             <span className="tape -right-6 -top-2 rotate-[24deg]" />
@@ -116,7 +116,7 @@ export default function Hero() {
 
         {/* ---------- who ---------- */}
         <motion.div style={{ y: textY }} className="lg:order-1 lg:col-span-6">
-          <motion.p {...fadeUp(0.2)} className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-line-2 bg-ink-2/80 px-3.5 py-1.5 text-[13px] font-medium text-fg">
+          <motion.p {...fadeUp(0.2)} data-build-hero="status" className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-line-2 bg-ink-2/80 px-3.5 py-1.5 text-[13px] font-medium text-fg">
             <span className="relative inline-flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ok/50 motion-reduce:hidden" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-ok" />
@@ -125,23 +125,25 @@ export default function Hero() {
             <span className="hidden text-muted sm:inline">· Bengaluru</span>
           </motion.p>
 
-          <SplitLines
-            as="h1"
-            id="hero-title"
-            animateNow={booted}
-            label={profile.name}
-            lines={["Battu", "Dhanush"]}
-            className="display text-[clamp(64px,9.4vw,148px)] text-fg"
-          />
+          <div data-build-hero="h1 · name" className="w-fit">
+            <SplitLines
+              as="h1"
+              id="hero-title"
+              animateNow={booted}
+              label={profile.name}
+              lines={["Battu", "Dhanush"]}
+              className="display text-[clamp(64px,9.4vw,148px)] text-fg"
+            />
+          </div>
 
-          <motion.p {...fadeUp(0.55)} className="mt-6 text-[17px] font-medium text-fg">
+          <motion.p {...fadeUp(0.55)} data-build-hero="roles" className="mt-6 w-fit text-[17px] font-medium text-fg">
             {profile.roles[0]} <span className="mx-1.5 text-amber-ink">×</span> {profile.roles[1]}
           </motion.p>
-          <motion.p {...fadeUp(0.7)} className="mt-4 max-w-[440px] text-[17px] leading-relaxed text-muted">
+          <motion.p {...fadeUp(0.7)} data-build-hero="intro" className="mt-4 max-w-[440px] text-[17px] leading-relaxed text-muted">
             Exploring AI. Building products. Automating ideas. This is my digital lab, a place where curiosity turns into <span data-delay="1.4" className="marker text-fg">real systems</span>.
           </motion.p>
 
-          <motion.div {...fadeUp(0.85)} className="mt-9 flex flex-wrap gap-3">
+          <motion.div {...fadeUp(0.85)} data-build-hero="button · cta" className="mt-9 flex w-fit flex-wrap gap-3">
             <Magnetic
               onClick={() => scrollToId("lab-start")}
               className="group h-12 rounded-full bg-accent px-6 text-[15px] font-semibold text-ink transition-colors hover:bg-fg"
