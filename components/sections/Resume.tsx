@@ -215,8 +215,8 @@ function ResumeViewer() {
 export default function Resume() {
   return (
     <section id="resume" aria-labelledby="resume-title" className="relative pb-10 pt-12 md:pb-14 md:pt-16">
-      <div className="mx-auto grid max-w-[1400px] items-center gap-14 px-5 md:grid-cols-2 md:px-10">
-        <div>
+      <div data-build-group className="mx-auto grid max-w-[1400px] items-center gap-14 px-5 md:grid-cols-2 md:px-10">
+        <div data-build="résumé · facts">
           <p data-write className="hand mb-3 flex items-center gap-2 text-[26px]">
             <svg data-draw viewBox="0 0 40 16" aria-hidden className="h-4 w-10 text-amber-ink"><path d="M2 10 C 10 4, 18 14, 26 8 S 34 6, 38 9" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
             the record
@@ -247,7 +247,7 @@ export default function Resume() {
           </div>
         </div>
 
-        <div data-stick className="mx-auto w-full max-w-[440px]">
+        <div data-stick data-build="résumé · preview" className="mx-auto w-full max-w-[440px]">
         <Tilt max={4} className="group mx-auto w-full max-w-[440px] rotate-[1.5deg] rounded-[3px]">
           <span className="tape -top-3 left-1/2 -translate-x-1/2 rotate-[-2deg]" />
           <button onClick={() => ui.set({ resumeOpen: true })} className="sheet relative block w-full overflow-hidden rounded-[3px] bg-white" aria-label="Open resume viewer">

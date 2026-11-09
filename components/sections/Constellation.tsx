@@ -63,7 +63,7 @@ export default function Constellation() {
           kicker="Inner orbit: core skills. Outer orbit: the stacks each build ran on. Select any star to see where it was used."
         />
 
-        <div className="mt-16 grid gap-6 lg:grid-cols-[1fr_360px]">
+        <div data-build-group className="mt-16 grid gap-6 lg:grid-cols-[1fr_360px]">
           {low && (
             <div className="sheet rounded-[4px] p-5">
               {webgl && (
@@ -93,7 +93,7 @@ export default function Constellation() {
               ))}
             </div>
           )}
-          <div ref={ref} hidden={low} className="plate relative h-[520px] rotate-[-0.4deg] overflow-hidden rounded-[6px] bg-[radial-gradient(ellipse_at_center,#25221a,var(--color-plate)_70%)] md:h-[640px]">
+          <div ref={ref} hidden={low} data-build="canvas · tech map" className="plate relative h-[520px] rotate-[-0.4deg] overflow-hidden rounded-[6px] bg-[radial-gradient(ellipse_at_center,#25221a,var(--color-plate)_70%)] md:h-[640px]">
             {webgl && !low && <ConstellationScene nodes={nodes} labels={labels} center={center} selected={selRef} wave={wave} active={inView} low={low} />}
 
             {/* DOM labels — real, focusable buttons positioned by the 3D projection */}
@@ -148,7 +148,7 @@ export default function Constellation() {
           </div>
 
           {/* detail panel */}
-          <aside data-stick aria-live="polite" className="sheet relative flex flex-col rounded-[4px] p-6">
+          <aside data-stick data-build="panel · where used" aria-live="polite" className="sheet relative flex flex-col rounded-[4px] p-6">
             <span className="tape -top-3 right-8 rotate-[4deg]" />
             <AnimatePresence mode="wait">
               <motion.div key={cur.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.3 }}>

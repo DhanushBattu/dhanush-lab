@@ -25,11 +25,12 @@ export default function Education() {
           </div>
         </div>
 
-        <ol className="relative mt-14 grid gap-8 md:grid-cols-5 md:gap-0">
+        <ol data-build-group className="relative mt-14 grid gap-8 md:grid-cols-5 md:gap-0">
           <svg data-draw aria-hidden className="absolute left-0 right-0 top-[1px] hidden h-3 w-full text-fg/45 md:block" preserveAspectRatio="none" viewBox="0 0 1000 12"><path d="M0 6 C 120 3, 220 9, 340 6 S 560 3, 680 7 S 880 4, 1000 6" fill="none" stroke="currentColor" strokeWidth="1.5" vectorEffect="non-scaling-stroke" /></svg>
           {timeline.map((e, i) => (
             <motion.li
               key={e.t}
+              data-build={`timeline · ${e.y}`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-10%" }}

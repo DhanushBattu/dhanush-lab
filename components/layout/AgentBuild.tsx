@@ -1,7 +1,8 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ui } from "@/lib/store";
+import { getLenis } from "@/lib/scroll";
 
 /**
  * "The site builds itself": a swarm of agent cursors, each with a name tag, flies in, drags a
@@ -9,6 +10,10 @@ import { ui } from "@/lib/store";
  *
  *  - [data-build-hero="label"]  built right after the loader (the opening screen)
  *  - [data-build-group] > [data-build="label"]  built when the group scrolls into view
+ *
+ * Once the opening screen is built, the page scrolls itself from top to bottom (the "tour"),
+ * so the agents can be watched building each section. Any scroll, touch, click or key press
+ * hands control straight back to the visitor.
  *
  * Pieces are hidden with clip-path only (never removed from the page), so screen readers and
  * search engines always see the full content. Skipped entirely for reduced motion.
@@ -114,7 +119,12 @@ function build(root: HTMLElement, jobs: Job[], opts: { from: { x: number; y: num
   return tl;
 }
 
+const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
 export default function AgentBuild() {
+  const [touring, setTouring] = useState(false);
+  const stopTour = useRef<() => void>(() => {});
+
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -139,8 +149,13 @@ export default function AgentBuild() {
         guides: hero ? { top: hero.offsetTop, height: hero.offsetHeight } : undefined,
       });
       timelines.push(heroTl);
-      // any input finishes the build at once
+      // when the opening screen is done, take the visitor on the tour
+      heroTl.call(() => {
+        if (!tookOver) setTimeout(startTour, 500);
+      });
+      // any input finishes the build at once (and means the visitor wants control)
       const skip = () => {
+        tookOver = true;
         finishHero();
         window.removeEventListener("wheel", skip);
         window.removeEventListener("keydown", skip);
@@ -152,6 +167,62 @@ export default function AgentBuild() {
       window.addEventListener("pointerdown", skip);
       window.addEventListener("touchmove", skip, { passive: true });
     };
+    // ---------- the tour: scroll top to bottom, pausing while each section is built ----------
+    let tookOver = false;
+    let cancelled = false;
+    const wait = (ms: number) => new Promise<void>((res) => setTimeout(res, ms));
+    const glide = (to: number, speed: number) =>
+      new Promise<void>((res) => {
+        const lenis = getLenis();
+        if (!lenis || cancelled) return res();
+        const dist = Math.abs(to - window.scrollY);
+        lenis.scrollTo(to, { duration: Math.max(1.1, dist / speed), easing: easeInOut, force: true, onComplete: () => res() });
+        // resolve anyway if something else interrupts the scroll
+        setTimeout(res, (Math.max(1.1, dist / speed) + 0.6) * 1000);
+      });
+    const top = (id: string, offset = 90) => {
+      const el = document.getElementById(id);
+      return el ? el.getBoundingClientRect().top + window.scrollY - offset : null;
+    };
+    const startTour = async () => {
+      if (tookOver || !getLenis()) return;
+      setTouring(true);
+      const inputs = ["wheel", "touchstart", "keydown", "pointerdown"] as const;
+      const stop = () => {
+        cancelled = true;
+        inputs.forEach((t) => window.removeEventListener(t, stop));
+        getLenis()?.scrollTo(window.scrollY, { immediate: true, force: true });
+        setTouring(false);
+      };
+      stopTour.current = stop;
+      inputs.forEach((t) => window.addEventListener(t, stop, { passive: true }));
+
+      const film = document.getElementById("film");
+      const steps: { to: () => number | null; speed: number; pause: number }[] = [
+        { to: () => top("about", 70), speed: 1100, pause: 2600 },
+        { to: () => (film ? film.offsetTop : null), speed: 1100, pause: 600 },
+        // the scroll film plays slowly, frame by frame
+        { to: () => (film ? film.offsetTop + film.offsetHeight - window.innerHeight : null), speed: 520, pause: 1600 },
+        { to: () => top("lab-start", 110), speed: 1000, pause: 2900 },
+        { to: () => top("skills", 70), speed: 1100, pause: 2600 },
+        { to: () => top("education", 70), speed: 1100, pause: 2200 },
+        { to: () => top("resume", 70), speed: 1100, pause: 2200 },
+        { to: () => document.documentElement.scrollHeight - window.innerHeight, speed: 1100, pause: 0 },
+      ];
+      for (const s of steps) {
+        if (cancelled) return;
+        const to = s.to();
+        if (to === null) continue;
+        await glide(Math.max(0, to), s.speed);
+        if (cancelled) return;
+        await wait(s.pause);
+      }
+      if (!cancelled) {
+        inputs.forEach((t) => window.removeEventListener(t, stop));
+        setTouring(false);
+      }
+    };
+
     // the loader announces itself with `booted`; give it a beat to fade
     let off = () => {};
     if (ui.get().booted) startHero();
@@ -195,6 +266,8 @@ export default function AgentBuild() {
     groups.forEach((g) => io.observe(g));
 
     return () => {
+      cancelled = true;
+      stopTour.current();
       off();
       io.disconnect();
       timelines.forEach((t) => t.progress(1).kill());
@@ -203,5 +276,28 @@ export default function AgentBuild() {
     };
   }, []);
 
-  return null;
+  return (
+    <div
+      aria-live="polite"
+      className={`fixed bottom-4 left-4 z-[86] flex items-center gap-3 rounded-full bg-plate py-2 pl-4 pr-2 text-[13px] text-plate-fg shadow-[0_14px_30px_-14px_rgba(0,0,0,.6)] transition-[opacity,transform] duration-500 md:bottom-6 md:left-6 ${
+        touring ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"
+      }`}
+    >
+      {touring && (
+        <>
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber/70" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-amber" />
+          </span>
+          <span>
+            <span className="font-semibold">Agents are building the lab</span>
+            <span className="hidden text-plate-muted sm:inline"> · scroll to take over</span>
+          </span>
+          <button onClick={() => stopTour.current()} className="rounded-full border border-white/20 px-3 py-1 text-[12px] font-semibold hover:border-amber hover:text-amber">
+            Stop
+          </button>
+        </>
+      )}
+    </div>
+  );
 }

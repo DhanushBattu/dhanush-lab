@@ -62,23 +62,23 @@ export default function Final() {
             </p>
           </Reveal>
           <Reveal delay={0.1}>
-            <ul className="flex flex-wrap gap-3 md:justify-end">
-              <li>
+            <ul data-build-group className="flex flex-wrap gap-3 md:justify-end">
+              <li data-build="link · github">
                 <Magnetic as="a" href={profile.github} target="_blank" className={btn}>
                   GitHub <span className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">↗</span>
                 </Magnetic>
               </li>
-              <li>
+              <li data-build="link · linkedin">
                 <Magnetic as="a" href={profile.linkedin} target="_blank" className={btn}>
                   LinkedIn <span className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">↗</span>
                 </Magnetic>
               </li>
-              <li>
+              <li data-build="link · email">
                 <Magnetic as="a" href={mailto} onClick={onEmail} ariaLabel={`Email ${profile.email}`} className={`${btn} !border-accent !bg-accent !text-ink hover:!bg-fg`}>
                   Email <span className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">↗</span>
                 </Magnetic>
               </li>
-              <li>
+              <li data-build="link · résumé">
                 <Magnetic onClick={() => ui.set({ resumeOpen: true })} className={btn}>
                   Résumé <span className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">↗</span>
                 </Magnetic>
