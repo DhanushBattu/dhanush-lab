@@ -81,7 +81,7 @@ export default function Nav() {
                     go(n.id);
                   }}
                   aria-current={active === n.id ? "true" : undefined}
-                  className={`relative rounded-full px-3 py-2 text-[14px] font-medium transition-colors hover:text-fg ${
+                  className={`relative rounded-full px-3 py-2 text-[14px] font-medium transition-colors hover:bg-ink-3/70 hover:text-fg ${
                     active === n.id ? "text-fg" : "text-muted"
                   }`}
                 >

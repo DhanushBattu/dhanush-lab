@@ -13,6 +13,7 @@ gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
  *  - handwritten notes (.hand[data-write]) appear left to right, as if being written
  *  - highlighter strokes (.marker) sweep across their words
  *  - taped-on paper ([data-stick]) drops onto the page and settles
+ *  - blocks of text ([data-reveal]) rise in, and headings ([data-parallax]) drift slower than the page
  * Everything here is skipped for visitors who prefer reduced motion: the page is then
  * simply shown in its final state.
  */
@@ -26,7 +27,7 @@ export default function NotebookMotion() {
         const once = { start: "top 88%", once: true } as const;
 
         // pencil strokes
-        gsap.utils.toArray<SVGPathElement>("[data-draw] path, path[data-draw]").forEach((p) => {
+        gsap.utils.toArray<SVGPathElement>("[data-draw] path:not([stroke-dasharray]), path[data-draw]").forEach((p) => {
           gsap.fromTo(
             p,
             { drawSVG: "0%" },
@@ -65,6 +66,20 @@ export default function NotebookMotion() {
         });
         // hide them until their turn (only when motion is on, so nothing is lost without JS)
         gsap.set("[data-stick]", { autoAlpha: 0 });
+
+        // plain blocks of text: rise in softly
+        gsap.set("[data-reveal]", { autoAlpha: 0, y: 22 });
+        ScrollTrigger.batch("[data-reveal]", {
+          start: "top 90%",
+          once: true,
+          onEnter: (els) => gsap.to(els, { autoAlpha: 1, y: 0, duration: 0.9, ease: "power3.out", stagger: 0.08, clearProps: "transform" }),
+        });
+
+        // parallax: headings drift a little slower than the page ([data-parallax] = distance in px)
+        gsap.utils.toArray<HTMLElement>("[data-parallax]").forEach((el) => {
+          const d = Number(el.dataset.parallax) || 24;
+          gsap.fromTo(el, { y: d }, { y: -d, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 0.6 } });
+        });
         ScrollTrigger.refresh();
       });
     };

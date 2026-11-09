@@ -19,9 +19,11 @@ export default function SectionHead({ index, title, kicker, id }: { index: strin
     <header className="grid gap-6 md:grid-cols-12 md:items-end">
       <div className="md:col-span-8">
         <Note className="mb-3">{note}</Note>
-        <SplitLines id={id} lines={title} className="display text-[clamp(42px,6.6vw,104px)] outline-none" />
+        <div data-parallax="28">
+          <SplitLines id={id} lines={title} className="display text-[clamp(42px,6.6vw,104px)] outline-none" />
+        </div>
       </div>
-      {kicker && <div className="text-[16px] leading-relaxed text-muted md:col-span-4 md:pb-3">{kicker}</div>}
+      {kicker && <div data-reveal className="text-[16px] leading-relaxed text-muted md:col-span-4 md:pb-3">{kicker}</div>}
     </header>
   );
 }

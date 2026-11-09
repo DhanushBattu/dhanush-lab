@@ -34,9 +34,9 @@ export default function Education() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-10%" }}
               transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="relative border-l border-line pl-5 md:border-l-0 md:pl-0 md:pr-8"
+              className="group relative border-l border-line pl-5 md:border-l-0 md:pl-0 md:pr-8"
             >
-              <span className={`absolute -left-[5px] top-1 h-[11px] w-[11px] rounded-full border md:static md:block ${e.now ? "border-amber-ink bg-amber" : "border-fg/50 bg-ink"}`} />
+              <span className={`absolute -left-[5px] top-1 h-[11px] w-[11px] rounded-full border transition-transform duration-300 group-hover:scale-150 md:static md:block ${e.now ? "border-amber-ink bg-amber" : "border-fg/50 bg-ink"}`} />
               <p className="hand mt-0 text-[26px] md:mt-4">{e.y}</p>
               <h3 className={`mt-1 font-display text-[19px] font-bold leading-snug tracking-[-0.01em] ${e.now ? "text-accent" : ""}`}>{e.t}</h3>
               <p className="mt-1 text-[15px] text-muted">{e.p}</p>

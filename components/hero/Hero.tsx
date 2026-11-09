@@ -1,6 +1,6 @@
 "use client";
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { availability, profile } from "@/content/profile";
 import { useUI, ui } from "@/lib/store";
 import { scrollToId } from "@/lib/scroll";
@@ -34,6 +34,34 @@ export default function Hero() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const printY = useTransform(scrollYProgress, [0, 1], ["0%", "8%"]);
   const printR = useTransform(scrollYProgress, [0, 1], [-1.8, -4]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "-12%"]);
+
+  // the print leans toward the cursor and the photo shifts inside it, so it reads as a real object
+  const reduced = useReducedMotion();
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const spring = { stiffness: 90, damping: 16, mass: 0.6 };
+  const tiltX = useSpring(useTransform(my, [-1, 1], [5, -5]), spring);
+  const tiltY = useSpring(useTransform(mx, [-1, 1], [-6, 6]), spring);
+  const photoX = useSpring(useTransform(mx, [-1, 1], [12, -12]), spring);
+  const photoY = useSpring(useTransform(my, [-1, 1], [10, -10]), spring);
+  const onMove = (e: React.PointerEvent) => {
+    if (reduced || e.pointerType !== "mouse" || !ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    mx.set(((e.clientX - r.left) / r.width) * 2 - 1);
+    my.set(((e.clientY - r.top) / r.height) * 2 - 1);
+  };
+  const onLeave = () => {
+    mx.set(0);
+    my.set(0);
+  };
+
+  // the photo develops in (fade + unblur) once it has loaded
+  const img = useRef<HTMLImageElement>(null);
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    if (img.current?.complete) setLoaded(true);
+  }, []);
 
   const fadeUp = (d: number) => ({
     initial: { opacity: 0, y: 14 },
@@ -53,25 +81,30 @@ export default function Hero() {
   };
 
   return (
-    <section ref={ref} id="top" aria-labelledby="hero-title" className="paper-grid relative isolate overflow-hidden">
+    <section ref={ref} id="top" aria-labelledby="hero-title" onPointerMove={onMove} onPointerLeave={onLeave} className="paper-grid relative isolate overflow-hidden">
       <div className="mx-auto grid max-w-[1400px] items-center gap-x-10 gap-y-10 px-5 pb-10 pt-28 md:px-10 md:pt-32 lg:min-h-[calc(100svh-150px)] lg:grid-cols-12 lg:pb-8">
         {/* ---------- the photo print ---------- */}
         <motion.div style={{ y: printY, rotate: printR }} className="relative mx-auto w-full max-w-[560px] lg:order-2 lg:col-span-6 lg:col-start-7">
+          <motion.div style={{ rotateX: tiltX, rotateY: tiltY, transformPerspective: 1100 }}>
           <motion.div {...print} className="sheet relative bg-[#fbf8f1] p-2.5 pb-12 sm:p-3 sm:pb-14">
             <span className="tape -left-6 -top-3 rotate-[-28deg]" />
             <span className="tape -right-6 -top-2 rotate-[24deg]" />
             <div className="group/photo plate relative aspect-[1266/1242] w-full overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <motion.img
+                ref={img}
                 src="img/dhanush-hero.webp"
                 alt="Portrait of Battu Dhanush"
                 width={1266}
                 height={1242}
                 fetchPriority="high"
-                className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover/photo:scale-[1.035] motion-reduce:transition-none"
+                onLoad={() => setLoaded(true)}
+                style={{ x: photoX, y: photoY, scale: 1.06 }}
+                className={`h-full w-full object-cover transition-[opacity,filter] duration-[1200ms] ease-out motion-reduce:transition-none ${loaded ? "opacity-100 blur-0" : "opacity-0 blur-md"}`}
               />
             </div>
             <p className="hand absolute bottom-2.5 left-4 right-4 text-[22px] text-fg/80 sm:bottom-3 sm:text-[26px]">B. Dhanush, Bengaluru</p>
+          </motion.div>
           </motion.div>
 
           {/* margin notes */}
@@ -82,7 +115,7 @@ export default function Hero() {
         </motion.div>
 
         {/* ---------- who ---------- */}
-        <div className="lg:order-1 lg:col-span-6">
+        <motion.div style={{ y: textY }} className="lg:order-1 lg:col-span-6">
           <motion.p {...fadeUp(0.2)} className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-line-2 bg-ink-2/80 px-3.5 py-1.5 text-[13px] font-medium text-fg">
             <span className="relative inline-flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ok/50 motion-reduce:hidden" />
@@ -124,7 +157,7 @@ export default function Hero() {
               Watch the intro
             </Magnetic>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
 
     </section>

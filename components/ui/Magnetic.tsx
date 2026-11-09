@@ -38,6 +38,7 @@ export default function Magnetic({ children, className = "", strength = 0.3, as 
     onPointerMove: move,
     onPointerLeave: leave,
     style: { x: sx, y: sy },
+    whileTap: { scale: 0.96 },
     className: `inline-flex items-center justify-center gap-2 ${className}`,
     "aria-label": ariaLabel,
   };
