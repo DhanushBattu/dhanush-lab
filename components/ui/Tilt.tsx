@@ -16,7 +16,7 @@ export default function Tilt({ children, className = "", max = 4 }: { children: 
   return (
     <motion.div
       ref={ref}
-      className={`relative [transform-style:preserve-3d] ${className}`}
+      className={`relative ${className}`}
       style={{ rotateX: rx, rotateY: ry, transformPerspective: 900 }}
       onPointerMove={(e) => {
         if (e.pointerType !== "mouse" || !ref.current) return;

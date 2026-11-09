@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { availability, profile } from "@/content/profile";
-import { useUI, ui } from "@/lib/store";
+import { useUI } from "@/lib/store";
 import { scrollToId } from "@/lib/scroll";
 import { SplitLines } from "@/components/ui/Reveal";
 import Magnetic from "@/components/ui/Magnetic";
@@ -148,13 +148,6 @@ export default function Hero() {
             >
               Play with my projects
               <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
-            </Magnetic>
-            <Magnetic
-              onClick={() => ui.set({ introOpen: true })}
-              className="h-12 rounded-full border border-line-2 bg-ink-2/70 px-6 text-[15px] font-semibold text-fg transition-colors hover:border-fg"
-            >
-              <span aria-hidden className="inline-block h-0 w-0 border-y-[5px] border-l-[8px] border-y-transparent border-l-amber-ink" />
-              Watch the intro
             </Magnetic>
           </motion.div>
         </motion.div>

@@ -10,7 +10,7 @@ It's set up as a lab notebook: paper, pencil notes and highlighter. Each project
 
 | Section | What it does |
 |---|---|
-| **Opening screen** | Name, roles, a short intro, and buttons to jump to the projects or watch the intro. |
+| **Opening screen** | Name, roles, a short intro, and a button to jump straight to the projects. |
 | **About me** | Four index cards: roots, events, skating and chess, and how he travels. |
 | **Scroll film** | A dark screen that stays put while you scroll. A photo breaks into thousands of points, scatters into "ideas", then settles into five cubes, one per project. Click a cube's name to open it. |
 | **The lab** | The five projects as cards. Each opens a full-screen room with a simulation. |
@@ -86,7 +86,6 @@ Images live in `public/img`:
 
 - `dhanush-hero.webp`: the photo on the opening screen.
 - `dhanush-portrait.webp` and `dhanush-portrait-map.png`: the scanned portrait used in the scroll film. The points are sampled from the map's pixels.
-- `dhanush-portrait-fallback.webp`: a still used in the intro.
 - `resume-full.webp` and `resume-preview.webp`: images of the résumé PDF (`public/resume/`). If you replace the PDF, regenerate these too.
 
 ## How the assistant works
@@ -101,7 +100,7 @@ To connect a real LLM later, add an API route that sends `content/profile.ts` as
 app/                  layout (SEO, fonts), page, globals.css (colours and type), icons, OG image
 content/              profile.ts (all text), ipl.ts (chart data)
 components/
-  hero/               Hero, IntroOverlay, ScanLabels
+  hero/               Hero, ScanLabels
   sections/           About, ScrollFilm, Lab, Constellation, Education, Resume, Final
   rooms/              ProjectRooms (full-screen project pages), ExperienceDemo
   builds/             VeriAI, RentalApp, CyberCafe, IplData (the simulations)

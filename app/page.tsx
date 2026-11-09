@@ -4,7 +4,6 @@ import Loader from "@/components/layout/Loader";
 import Nav from "@/components/layout/Nav";
 import Cursor from "@/components/ui/Cursor";
 import Hero from "@/components/hero/Hero";
-import IntroOverlay from "@/components/hero/IntroOverlay";
 import Lab from "@/components/sections/Lab";
 import ScrollFilm from "@/components/sections/ScrollFilm";
 import About from "@/components/sections/About";
@@ -45,7 +44,6 @@ export default function Page() {
       <Final />
       <ProjectRooms />
       <AskAI />
-      <IntroOverlay />
     </>
   );
 }

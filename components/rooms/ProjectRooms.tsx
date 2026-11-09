@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cafe, experience, ipl, profile, rental, veriai } from "@/content/profile";
 import { ui, useUI, type RoomId } from "@/lib/store";
@@ -107,6 +107,11 @@ export default function ProjectRooms() {
   const idx = ROOMS.findIndex((r) => r.id === roomId);
   const room = idx >= 0 ? ROOMS[idx] : null;
   const open = !!room;
+  // the room's contents mount once the page has finished opening, so the opening itself stays smooth
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    if (!open) setReady(false);
+  }, [open]);
   useEffect(() => {
     if (!open) return;
     lockScroll(true);
@@ -153,7 +158,9 @@ export default function ProjectRooms() {
           initial={{ clipPath: from ?? "inset(100% 0px 0px 0px round 0px)" }}
           animate={{ clipPath: from ? "inset(0px 0px 0px 0px round 0px)" : "inset(0% 0px 0px 0px round 0px)" }}
           exit={{ clipPath: from ?? "inset(0px 0px 100% 0px round 0px)" }}
-          transition={{ duration: from ? 0.75 : 0.7, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: from ? 0.62 : 0.55, ease: [0.22, 1, 0.36, 1] }}
+          onAnimationComplete={() => setReady(true)}
+          style={{ willChange: "clip-path" }}
         >
           <div className="flex items-center gap-3 border-b border-line-2 bg-ink-2 px-4 py-3 md:px-8">
             <span className="hand hidden text-[24px] lg:inline">the lab /</span>
@@ -186,6 +193,7 @@ export default function ProjectRooms() {
             </button>
           </div>
           <div ref={scroller} className="flex-1 overflow-y-auto overscroll-contain" data-lenis-prevent>
+            {ready && (
             <AnimatePresence mode="wait">
               <motion.article
                 key={room.id}
@@ -258,6 +266,7 @@ export default function ProjectRooms() {
                 </div>
               </motion.article>
             </AnimatePresence>
+            )}
           </div>
         </motion.div>
       )}

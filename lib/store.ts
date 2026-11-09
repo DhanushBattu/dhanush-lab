@@ -5,7 +5,6 @@ import { useSyncExternalStore } from "react";
 type State = {
   booted: boolean; // loader finished
   assistantOpen: boolean;
-  introOpen: boolean; // intro overlay
   resumeOpen: boolean;
   room: RoomId | null; // which project room is open (projects live off the main page)
   roomFrom: string | null; // clip-path of the card the room grew out of
@@ -13,7 +12,7 @@ type State = {
 
 export type RoomId = "automation" | "veriai" | "rental" | "cafe" | "ipl";
 
-let state: State = { booted: false, assistantOpen: false, introOpen: false, resumeOpen: false, room: null, roomFrom: null };
+let state: State = { booted: false, assistantOpen: false, resumeOpen: false, room: null, roomFrom: null };
 const listeners = new Set<() => void>();
 
 export const ui = {
