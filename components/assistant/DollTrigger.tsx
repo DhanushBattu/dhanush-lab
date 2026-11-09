@@ -33,21 +33,43 @@ const DollTrigger = forwardRef<HTMLButtonElement, Props>(function DollTrigger({ 
     return () => window.removeEventListener("pointermove", onMove);
   }, []);
 
-  // one friendly hello when it first appears
+  // say hello on its own: once when it first appears, and once more when the visitor reaches the projects
+  const said = useRef(0);
   useEffect(() => {
     if (!visible) return;
-    const a = setTimeout(() => {
-      // on phones the note would sit on top of the content, so D-01 only waves
-      setBubble(window.matchMedia("(min-width: 768px)").matches);
-      wave.current = true;
-    }, 1600);
-    const b = setTimeout(() => {
-      setBubble(false);
-      wave.current = false;
-    }, 6200);
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const greet = (after: number, length: number) => {
+      timers.push(
+        setTimeout(() => {
+          // on phones the note would sit on top of the content, so D-01 only waves
+          setBubble(window.matchMedia("(min-width: 768px)").matches);
+          wave.current = true;
+        }, after),
+        setTimeout(() => {
+          setBubble(false);
+          wave.current = false;
+        }, after + length),
+      );
+    };
+    if (said.current === 0) {
+      said.current = 1;
+      greet(1200, 9000);
+    }
+    const lab = document.getElementById("lab");
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting && said.current === 1) {
+          said.current = 2;
+          greet(600, 6500);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.25 },
+    );
+    if (lab) io.observe(lab);
     return () => {
-      clearTimeout(a);
-      clearTimeout(b);
+      timers.forEach(clearTimeout);
+      io.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible && true]);
@@ -77,16 +99,20 @@ const DollTrigger = forwardRef<HTMLButtonElement, Props>(function DollTrigger({ 
     <div className={`fixed bottom-2 right-2 z-[80] transition-all duration-700 sm:bottom-4 sm:right-4 ${visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-6 opacity-0"}`}>
       <AnimatePresence>
         {showBubble && (
-          <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6 }}
-            transition={{ duration: 0.3 }}
-            className="pointer-events-none absolute bottom-[calc(100%-6px)] right-3 w-[210px] rounded-[4px] rounded-br-none bg-[#f7d98a] px-3.5 py-2.5 text-[14px] leading-snug text-fg shadow-[0_14px_24px_-14px_rgba(60,40,0,.6)] rotate-[-1.5deg]"
+          <motion.button
+            type="button"
+            onClick={onOpen}
+            tabIndex={-1}
+            initial={{ opacity: 0, y: 10, scale: 0.92, rotate: 2 }}
+            animate={{ opacity: 1, y: 0, scale: 1, rotate: -1.5 }}
+            exit={{ opacity: 0, y: 6, scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 260, damping: 18 }}
+            whileHover={{ y: -2 }}
+            className="absolute bottom-[calc(100%-6px)] right-3 w-[220px] rounded-[4px] rounded-br-none bg-[#f7d98a] px-3.5 py-2.5 text-left text-[14px] leading-snug text-fg shadow-[0_14px_24px_-14px_rgba(60,40,0,.6)]"
             aria-hidden
           >
-            Hi! I&apos;m D-01. Try Dhanush&apos;s <span className="font-semibold">live projects</span> first, or <span className="font-semibold text-accent">ask me anything →</span>
-          </motion.div>
+            Hi, I&apos;m his assistant. <span className="font-semibold text-accent">Ask me anything you need →</span>
+          </motion.button>
         )}
       </AnimatePresence>
       <button

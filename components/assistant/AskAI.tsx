@@ -139,6 +139,9 @@ export default function AskAI() {
                 <p>&gt; knowledge base: {kbStats}</p>
                 <p>&gt; mode: grounded — answers come only from this portfolio</p>
               </div>
+              <div className="border-l border-amber/50 pl-3 text-plate-fg">
+                <p>Hi, I&apos;m Dhanush&apos;s assistant. Ask me anything you need: his projects, skills, experience, studies, or what he does outside work.</p>
+              </div>
 
               {msgs.map((m) =>
                 m.role === "user" ? (
@@ -172,7 +175,7 @@ export default function AskAI() {
             {/* quick chips after first message */}
             {msgs.length > 0 && (
               <div className="no-scrollbar flex gap-1.5 overflow-x-auto border-t border-white/10 px-4 py-2">
-                {["Projects", "Rental app", "Experience", "Tech stack", "Learning", "Contact"].map((s) => (
+                {["Projects", "Experience", "Tech stack", "Education", "Hobbies", "Contact"].map((s) => (
                   <button key={s} onClick={() => submit(s)} className="shrink-0 rounded-full border border-white/10 px-2.5 py-1 font-code text-[11px] text-plate-muted hover:border-amber/70 hover:text-plate-fg">
                     {s}
                   </button>

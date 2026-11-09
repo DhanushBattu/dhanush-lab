@@ -21,7 +21,8 @@ export default function Cursor() {
       rx = x,
       ry = y,
       raf = 0,
-      hover = false;
+      hover = false,
+      dark = false;
 
     const move = (e: PointerEvent) => {
       x = e.clientX;
@@ -30,6 +31,8 @@ export default function Cursor() {
       root.style.setProperty("--my", `${y}px`);
       const t = e.target as HTMLElement | null;
       hover = !!t?.closest("a, button, [role='button'], input, textarea, select, [data-cursor]");
+      // over dark screens (the film, the skills map, the assistant) the cursor turns light
+      dark = !!t?.closest(".plate, .bg-plate, [data-dark]");
     };
     const loop = () => {
       rx += (x - rx) * 0.18;
@@ -37,8 +40,15 @@ export default function Cursor() {
       if (dot.current) dot.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
       if (ring.current) {
         ring.current.style.transform = `translate3d(${rx}px, ${ry}px, 0) scale(${hover ? 1.8 : 1})`;
-        ring.current.style.borderColor = hover ? "rgba(14,107,91,.75)" : "rgba(28,26,22,.35)";
+        ring.current.style.borderColor = dark
+          ? hover
+            ? "rgba(240,160,56,.95)"
+            : "rgba(236,230,216,.7)"
+          : hover
+            ? "rgba(14,107,91,.75)"
+            : "rgba(28,26,22,.35)";
       }
+      if (dot.current) dot.current.style.backgroundColor = dark ? (hover ? "#f0a038" : "#ece6d8") : "";
       raf = requestAnimationFrame(loop);
     };
     window.addEventListener("pointermove", move, { passive: true });
@@ -55,7 +65,7 @@ export default function Cursor() {
       <div ref={dot} className="absolute -left-[2px] -top-[2px] h-1 w-1 rounded-full bg-fg" />
       <div
         ref={ring}
-        className="absolute -left-4 -top-4 h-8 w-8 rounded-full border transition-[border-color] duration-200"
+        className="absolute -left-4 -top-4 h-8 w-8 rounded-full border-[1.5px] transition-[border-color] duration-200"
         style={{ transitionProperty: "border-color", willChange: "transform" }}
       />
     </div>

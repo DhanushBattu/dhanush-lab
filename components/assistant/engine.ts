@@ -122,7 +122,7 @@ const intents: Intent[] = [
     words: ["education", "study", "studies", "college", "degree", "bmsit", "bms", "iit", "madras", "cgpa", "gpa", "university", "graduat", "school"],
     answer: () => ({
       source: "education",
-      lines: education.map((e) => `→ ${e.title} — ${e.place} (${e.year}) · ${e.meta}`),
+      lines: education.map((e) => `→ ${e.title} — ${e.place} (${e.year.replace(" (expected)", ", expected")}) · ${e.meta}`),
     }),
   },
   {
@@ -138,21 +138,36 @@ const intents: Intent[] = [
   },
   {
     id: "contact",
-    words: ["contact", "email", "reach", "hire", "github", "linkedin", "available", "availability", "internship", "open to", "connect"],
+    words: ["contact", "email", "mail", "reach", "github", "linkedin", "available", "availability", "internship", "open to", "connect", "roles", "looking for", "position", "phone", "number", "call"],
     answer: () => ({
       source: "contact",
-      lines: [`Available for roles in ${availability.join(" and ")}.`, `Email → ${profile.email}`, `GitHub → ${profile.github.replace("https://", "")}`, `LinkedIn → ${profile.linkedin.replace("https://www.", "")}`],
+      lines: [`He's open to roles in ${availability.join(" and ")}. The best way to reach him:`, `Email → ${profile.email}`, `GitHub → ${profile.github.replace("https://", "")}`, `LinkedIn → ${profile.linkedin.replace("https://www.", "")}`],
     }),
   },
   {
     id: "resume",
     words: ["resume", "cv", "pdf"],
-    answer: () => ({ source: "resume", lines: ["One-page resume: AI/ML · Software · Data.", `Download → ${profile.resumePdf}`] }),
+    answer: () => ({ source: "resume", lines: ["His résumé is one page: AI/ML, software and data.", "Open it from the Résumé section of this page (you can zoom in there), or use the Résumé button at the bottom."] }),
   },
   {
     id: "interests",
     words: ["hobby", "hobbies", "interest", "free time", "spare time", "outside work", "skate", "skating", "chess", "puzzle", "esport", "gaming", "games"],
-    answer: () => ({ source: "about-me", lines: ["Off the screen:", ...profile.interests.map((x) => `  → ${x}`)] }),
+    answer: () => ({ source: "about-me", lines: ["Off the screen, he's into:", ...profile.interests.map((x) => `→ ${x}`)] }),
+  },
+  {
+    id: "strengths",
+    words: ["why should", "why hire", "hire him", "strength", "good at", "stand out", "teamwork", "team player", "team", "leadership", "best at", "what makes him"],
+    answer: () => ({
+      source: "portfolio",
+      lines: [
+        "Here's what the record shows:",
+        "→ Ships real work: a WhatsApp + generative-AI automation platform for Elite IIT, with +32% engagement, +70% content speed and +40% marketing efficiency.",
+        "→ Builds carefully: VeriAI, his B.E. major project in a team of 4, accepts no verdict without a cited source and is backed by 141 automated tests.",
+        "→ Works across the stack: Flutter and Firebase apps, FastAPI and React, PHP and MySQL, and ML in Python.",
+        "→ Leads people too: Co-Head of his college's main event and operations manager for the inter-college debate tournament at Utsaha Vaibhava.",
+        "Ask about any of these for the details.",
+      ],
+    }),
   },
   {
     id: "events",
@@ -161,8 +176,8 @@ const intents: Intent[] = [
   },
   {
     id: "roots",
-    words: ["hyderabad", "hometown", "where is he from", "from where", "family", "roots"],
-    answer: () => ({ source: "about-me", lines: [aboutMe[0].body.replace("I'm", "He's").replace("my family", "his family")] }),
+    words: ["hyderabad", "hometown", "where is he from", "from where", "family", "roots", "based", "location", "located", "where does he live", "which city", "bengaluru", "bangalore"],
+    answer: () => ({ source: "about-me", lines: ["He's based in Bengaluru, Karnataka, and his family ties run back to Hyderabad."] }),
   },
   {
     id: "trips",
@@ -188,7 +203,7 @@ const techIntent = (q: string): Answer | null => {
   if (!hit.length) return null;
   return {
     source: "tech-constellation",
-    lines: hit.flatMap((t) => [`${t.label}`, ...t.used.filter((u) => !u.startsWith("[")).map((u) => `  → ${u}`), ...(t.used.every((u) => u.startsWith("[")) ? ["  → Listed as a skill; no specific project is recorded for it yet."] : [])]),
+    lines: hit.flatMap((t) => [`${t.label}`, ...(t.group === "language" ? ["  → One of his core languages."] : []), ...t.used.filter((u) => !u.startsWith("[")).map((u) => `  → ${u}`), ...(t.used.every((u) => u.startsWith("[")) ? ["  → Listed as a skill; no specific project is recorded for it yet."] : [])]),
   };
 };
 
@@ -200,9 +215,37 @@ const skillsAnswer = (): Answer => {
   };
 };
 
+const greeting = /^\s*(hi+|hey+|hello+|hii+|yo|hola|namaste|good (morning|afternoon|evening))\b[\s!.,]*(there|d-?01)?[\s!.?]*$/;
+const thanks = /\b(thanks|thank you|thx|ty|great|awesome|cool|nice|ok(ay)?)\b[\s!.]*$/;
+const bye = /\b(bye|goodbye|see you|cya)\b/;
+
 export function ask(raw: string): Answer {
   const q = ` ${raw.toLowerCase().trim()} `;
-  if (!raw.trim()) return { source: "system", lines: ["Type a question about Dhanush's work."] };
+  const t = raw.toLowerCase().trim();
+  if (!t) return { source: "system", lines: ["Ask me anything about Dhanush: his projects, skills, experience, studies or life outside work."] };
+
+  // small talk
+  if (greeting.test(t))
+    return { source: "assistant", lines: ["Hey! What would you like to know about Dhanush?", "A good start: \"What projects has he built?\" or \"What does he do outside work?\""] };
+  if (bye.test(t)) return { source: "assistant", lines: ["Thanks for stopping by! His contact details are at the bottom of the page whenever you need them."] };
+  if (thanks.test(t) && t.split(/\s+/).length <= 4) return { source: "assistant", lines: ["Happy to help. Anything else you'd like to know about him?"] };
+  if (/\b(who|what) are you\b|your name|are you (a )?(bot|ai|human)/.test(t))
+    return {
+      source: "assistant",
+      lines: ["I'm D-01, Dhanush's assistant on this site.", "I answer only from what's in his portfolio, so I won't make things up. Ask me about his projects, skills, experience, studies or hobbies."],
+    };
+
+  // direct facts that deserve a direct answer
+  if (has(q, ["cgpa", "gpa", "grade", "marks", "percentage", "score in"]))
+    return { source: "education", lines: [`CGPA 8.0 in his B.E. in AI & ML at ${education[0].place} (2023–2027, expected).`, "He scored 92% in his Intermediate (Science) at Sri Abhida (TSBIE)."] };
+  if (has(q, ["rating", "elo"]) && has(q, ["chess", "rating", "elo"]))
+    return { source: "about-me", lines: ["He's rated 1500 on Chess.com, where he plays and solves puzzles to keep his thinking sharp."] };
+  if (/\b(his|the) github\b|github (link|profile|account|url|id)/.test(t))
+    return { source: "contact", lines: [`GitHub → ${profile.github.replace("https://", "")}`, "VeriAI, the rental app and IPL Intelligence each have their code there."] };
+  if (has(q, ["phone", "mobile number", "whatsapp number", "call him"]))
+    return { source: "contact", lines: ["His phone number isn't shared on this site. Email is the best way to reach him:", `Email → ${profile.email}`, `LinkedIn → ${profile.linkedin.replace("https://www.", "")}`] };
+  if (has(q, ["speak", "spoken", "mother tongue"]))
+    return { source: "none", lines: ["The spoken languages he knows aren't on record here, so I won't guess.", "If you meant programming languages: Python, Java, SQL, JavaScript, TypeScript, HTML and CSS."] };
 
   // "what technologies does he use" → full stack; "where did he use python" → specific
   const specificTech = techIntent(q);
@@ -219,14 +262,19 @@ export function ask(raw: string): Answer {
       best = it;
     }
   }
+  // "tell me about the IPL project" → the IPL project, not the list of all projects
+  if (best?.id === "projects") {
+    const specific = intents.find((it) => ["veriai", "rental", "cafe", "ipl"].includes(it.id) && it.words.some((w) => q.includes(w)));
+    if (specific) return specific.answer();
+  }
   if (best && score > 0) return best.answer();
   if (specificTech) return specificTech;
 
   return {
     source: "none",
     lines: [
-      "That isn't in the portfolio records — and I only answer from them, so I won't guess.",
-      "Try: projects · rental app · experience · technologies · education · what he's learning · contact.",
+      "Sorry, I don't have that one. I only answer from what's on this site, so I won't guess.",
+      "I can tell you about his projects, skills, experience, education, hobbies, or how to contact him.",
     ],
   };
 }
@@ -234,10 +282,10 @@ export function ask(raw: string): Answer {
 export const suggestions = [
   "What projects has Dhanush built?",
   "How does VeriAI catch hallucinations?",
-  "What did he contribute to the rental application?",
   "What technologies does he use?",
   "Tell me about his experience.",
-  "What is he currently learning?",
+  "Why should we hire him?",
+  "What does he do outside work?",
 ];
 
 export const kbStats = `1 real-world project · 4 builds · ${tech.length} technologies · ${rental.flow.length}-stage architecture`;
