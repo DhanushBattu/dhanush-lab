@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { ui } from "@/lib/store";
 
 /**
  * Pencil dust behind the whole page. Thousands of faint graphite (and a few amber) specks drift
@@ -71,7 +72,7 @@ export default function DustField() {
     if (!el) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const coarse = window.matchMedia("(pointer: coarse), (max-width: 767px)").matches;
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1 : 1.5);
 
     let renderer: THREE.WebGLRenderer;
     try {
@@ -84,7 +85,7 @@ export default function DustField() {
     el.appendChild(renderer.domElement);
     renderer.domElement.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
 
-    const N = coarse ? 1400 : 3200;
+    const N = coarse ? 900 : 3200;
     const seeds = new Float32Array(N * 3);
     const amber = new Float32Array(N);
     for (let i = 0; i < N; i++) {
@@ -142,11 +143,29 @@ export default function DustField() {
     window.addEventListener("pointermove", onMove, { passive: true });
     document.addEventListener("pointerleave", onLeave);
 
+    // the paper is hidden behind the scroll film's dark screen and behind full-screen panels;
+    // don't draw dust nobody can see
+    const film = document.getElementById("film");
+    const covered = () => {
+      const s = ui.get();
+      if (s.room || s.resumeOpen || (coarse && s.assistantOpen)) return true;
+      if (!film) return false;
+      const r = film.getBoundingClientRect();
+      return r.top <= 0 && r.bottom >= window.innerHeight;
+    };
+
     let raf = 0;
+    let odd = false;
     const clock = new THREE.Clock();
     const frame = () => {
       raf = requestAnimationFrame(frame);
       if (document.hidden) return;
+      // phones: 30 frames a second is plenty for slow-drifting dust
+      if (coarse && (odd = !odd)) return;
+      if (covered()) {
+        clock.getDelta();
+        return;
+      }
       const dt = Math.min(clock.getDelta(), 0.05);
       uniforms.uTime.value += dt;
       uniforms.uScroll.value = window.scrollY;

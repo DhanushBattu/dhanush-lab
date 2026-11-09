@@ -59,7 +59,7 @@ export default function AiCore({ active, low }: { active: boolean; low: boolean 
     <Canvas
       className="!absolute inset-0"
       frameloop={active ? "always" : "never"}
-      dpr={[1, 1.75]}
+      dpr={[1, low ? 1.25 : 1.75]}
       camera={{ fov: 35, position: [0, 0, 6] }}
       gl={{ alpha: true, antialias: true }}
       flat

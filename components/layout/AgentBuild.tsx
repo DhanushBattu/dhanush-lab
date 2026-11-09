@@ -64,11 +64,20 @@ let nextAgent = 0;
 function build(root: HTMLElement, jobs: Job[], opts: { from: { x: number; y: number }; stagger: number; guides?: { top: number; height: number } }) {
   // each batch draws on its own sheet, removed when the batch is done
   const layer = document.createElement("div");
+  root.style.height = `${document.documentElement.scrollHeight}px`;
   root.append(layer);
   const tl = gsap.timeline();
   const sx = window.scrollX, sy = window.scrollY;
 
-  jobs.forEach((job, i) => {
+  // pieces that aren't on the page right now (e.g. hidden on phones) are just shown
+  const visible = jobs.filter((j) => {
+    const r = j.el.getBoundingClientRect();
+    if (r.width > 2 && r.height > 2) return true;
+    gsap.set(j.el, { clipPath: "none" });
+    return false;
+  });
+
+  visible.forEach((job, i) => {
     const agent = AGENTS[nextAgent++ % AGENTS.length];
     const r = job.el.getBoundingClientRect();
     const x = r.left + sx, y = r.top + sy, w = r.width, h = r.height;
@@ -130,7 +139,8 @@ export default function AgentBuild() {
 
     const layer = document.createElement("div");
     layer.setAttribute("aria-hidden", "true");
-    layer.style.cssText = "position:absolute;left:0;top:0;width:0;height:0;z-index:84;pointer-events:none";
+    // full page size and clipped, so cursors flying off the edge never make the page scroll sideways (phones)
+    layer.style.cssText = "position:absolute;left:0;top:0;width:100%;height:0;overflow:hidden;z-index:84;pointer-events:none";
     document.body.appendChild(layer);
 
     const timelines: gsap.core.Timeline[] = [];

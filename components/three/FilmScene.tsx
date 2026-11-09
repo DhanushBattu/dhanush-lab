@@ -97,7 +97,7 @@ function cubeAt(c: number, narrow: boolean): [number, number, number] {
   if (!narrow) return [(c - 2) * 1.55, 0.55, 0.86];
   const row = Math.floor(c / 2);
   const x = c === 4 ? 0 : (c % 2 === 0 ? -0.72 : 0.72);
-  return [x, 1.75 - row * 1.25, 0.55];
+  return [x, 1.9 - row * 1.2, 0.55]; // kept high so the captions underneath stay clear
 }
 
 export default function FilmScene({ progress, active, still = false, labels }: Props) {
@@ -122,8 +122,8 @@ export default function FilmScene({ progress, active, still = false, labels }: P
 
       let narrow = el.clientWidth / Math.max(1, el.clientHeight) < 0.9;
       const low = window.matchMedia("(pointer: coarse), (max-width: 767px)").matches;
-      const N = low ? 15000 : 22000;
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+      const N = low ? 12000 : 22000;
+      const dpr = Math.min(window.devicePixelRatio || 1, low ? 1.5 : 1.75);
 
       let renderer: THREE.WebGLRenderer;
       try {
@@ -275,8 +275,11 @@ export default function FilmScene({ progress, active, still = false, labels }: P
         // camera: close on the face, back for the ideas, settle for the systems
         const faceZ = cam.aspect < 0.9 ? 7.2 : 5.4;
         const ideaZ = 8.6;
-        const gridZ = cam.aspect < 0.9 ? 8.2 : 7.4;
+        // short phones (iPhone SE and the like): pull back a little and lift the cubes clear of the caption
+        const short = cam.aspect < 0.9 && el.clientHeight < 640;
+        const gridZ = short ? 9.2 : cam.aspect < 0.9 ? 8.2 : 7.4;
         cam.position.z = THREE.MathUtils.lerp(THREE.MathUtils.lerp(faceZ, ideaZ, a), gridZ, b);
+        cam.position.y = short ? -0.75 * b : 0;
         pts.rotation.y = a * (1 - b) * (0.5 + uniforms.uTime.value * 0.06) + b * Math.sin(uniforms.uTime.value * 0.35) * 0.35;
         pts.rotation.x = a * (1 - b) * 0.35 + b * 0.18;
         renderer.render(scene, cam);

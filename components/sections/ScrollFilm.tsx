@@ -21,14 +21,14 @@ const PROJECTS: { id: RoomId; t: string }[] = [
   { id: "ipl", t: "IPL Intelligence" },
 ];
 
-const FRAMES: { note: string; line: string; sub?: string }[] = [
+const FRAMES: { note: string; line: string; more?: string; sub?: string }[] = [
   {
     note: "frame 1 · the person",
     line: "Battu Dhanush, an engineer building AI and full-stack systems.",
     sub: "Off the screen: skating, and solving puzzles like chess.",
   },
   { note: "frame 2 · the ideas", line: "Every project starts as a scatter of ideas." },
-  { note: "frame 3 · the systems", line: "Five of them became working systems. Click one to step inside." },
+  { note: "frame 3 · the systems", line: "Five of them became working systems.", more: " Click one to step inside." },
 ];
 
 /**
@@ -148,7 +148,11 @@ export default function ScrollFilm() {
                     style={{ opacity: on ? 1 : 0, transform: on ? "translateY(0)" : "translateY(12px)" }}
                   >
                     <p className="hand text-[24px] text-amber md:text-[28px]">{f.note}</p>
-                    <p className="mt-1 font-display text-[clamp(24px,2.6vw,38px)] font-bold leading-[1.02] tracking-[-0.03em] text-plate-fg">{f.line}</p>
+                    <p className="mt-1 font-display text-[clamp(24px,2.6vw,38px)] font-bold leading-[1.02] tracking-[-0.03em] text-plate-fg">
+                      {f.line}
+                      {/* on short phones the cubes need the room, so the hint goes */}
+                      {f.more && <span className="hidden [@media(min-height:720px)]:inline">{f.more}</span>}
+                    </p>
                     {f.sub && <p className="mt-3 text-[15px] font-medium text-plate-muted md:text-[17px]">{f.sub}</p>}
                     {i === 2 && (
                       <button
