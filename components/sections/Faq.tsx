@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { faq } from "@/content/faq";
 import { Note } from "@/components/ui/SectionHead";
 
@@ -15,7 +16,10 @@ export default function Faq() {
           Dhanush Battu, <span className="marker">in short.</span>
         </h2>
         <p data-reveal className="mt-5 max-w-[560px] text-[16px] leading-relaxed text-muted">
-          The short version, for anyone in a hurry.
+          The short version, for anyone in a hurry.{" "}
+          <Link href="/about" className="font-medium text-fg underline underline-offset-4 hover:text-amber-ink">
+            All of it on one page →
+          </Link>
         </p>
 
         <ul data-build-group className="mt-12 grid gap-x-12 border-t border-line md:mt-14 md:grid-cols-2">

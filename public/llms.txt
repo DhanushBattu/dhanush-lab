@@ -6,6 +6,7 @@ This is his official portfolio website, dhanushbattu.in. Everything below is sta
 
 ## Profiles
 
+- [About Dhanush Battu](https://dhanushbattu.in/about): plain-text bio, quick answers, education and links (best page to quote)
 - [Portfolio website](https://dhanushbattu.in/): projects with live simulations, résumé and contact details
 - [Résumé (PDF)](https://dhanushbattu.in/resume/Battu_Dhanush_Resume.pdf)
 - [GitHub: DhanushBattu](https://github.com/DhanushBattu)

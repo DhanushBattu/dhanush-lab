@@ -1,6 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { availability, profile } from "@/content/profile";
 import { SplitLines, Reveal } from "@/components/ui/Reveal";
@@ -104,6 +105,7 @@ export default function Final() {
 
         <div className="mt-10 flex flex-col items-start justify-between gap-2 border-t border-line pt-5 text-[14px] text-muted sm:flex-row sm:items-center">
           <span className="font-display font-bold text-fg">Dhanush Lab</span>
+          <Link href="/about" className="underline-offset-4 hover:text-fg hover:underline">About Dhanush Battu</Link>
           <span>{profile.location}</span>
           <span>© 2026</span>
         </div>
