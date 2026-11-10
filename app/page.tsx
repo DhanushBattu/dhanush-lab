@@ -13,6 +13,7 @@ import ProjectRooms from "@/components/rooms/ProjectRooms";
 import Constellation from "@/components/sections/Constellation";
 import Education from "@/components/sections/Education";
 import Resume from "@/components/sections/Resume";
+import Faq from "@/components/sections/Faq";
 import Final from "@/components/sections/Final";
 import AskAI from "@/components/assistant/AskAI";
 
@@ -42,6 +43,7 @@ export default function Page() {
         <Constellation />
         <Education />
         <Resume />
+        <Faq />
       </main>
       <Final />
       <ProjectRooms />

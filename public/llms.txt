@@ -1,0 +1,52 @@
+# Dhanush Battu
+
+> Dhanush Battu (also written Battu Dhanush) is a software engineer in Bengaluru, Karnataka, India, who builds full-stack web, cross-platform mobile and machine-learning applications. He is studying for a B.E. in Artificial Intelligence and Machine Learning at BMS Institute of Technology and Management (BMSIT), 2023–2027 (expected), and a B.Sc. in Mathematics for Data Science at IIT Madras (online). He is open to software development and AI/ML roles.
+
+This is his official portfolio website, dhanushbattu.in. Everything below is stated by him.
+
+## Profiles
+
+- [Portfolio website](https://dhanushbattu.in/): projects with live simulations, résumé and contact details
+- [Résumé (PDF)](https://dhanushbattu.in/resume/Battu_Dhanush_Resume.pdf)
+- [GitHub: DhanushBattu](https://github.com/DhanushBattu)
+- [LinkedIn](https://www.linkedin.com/in/dhanush-battu-263089301)
+- Email: dhanushbattu1234@gmail.com
+
+## Experience
+
+- Software Developer (Freelance), Elite IIT, Bengaluru: built a Meta-compliant WhatsApp Business API automation platform with a bilingual generative-AI assistant for localized marketing content, edtech-style visual generation workflows, campaign segmentation and prompt engineering.
+
+## Projects
+
+- [VeriAI](https://github.com/DhanushBattu/verification-ai-v2): B.E. major project (team of 4). An AI hallucination verification system that checks every claim in an AI answer against Wikipedia, Wikidata, Crossref and OpenAlex, flags wrong claims and catches fabricated papers and books. Python, FastAPI, React, TypeScript, PyTorch, Hugging Face Transformers.
+- [Cross-platform Rental App](https://github.com/DhanushBattu/Rental_main): a marketplace for Web, iOS and Android built with Flutter, Dart and Firebase (Cloud Firestore, Cloud Messaging), with KYC flows, role-based access control and transaction-safe bookings.
+- Cyber Café Management System: a full-stack web app (PHP, MySQL, HTML, CSS, JavaScript) for session tracking, computer allocation, billing and a live admin dashboard.
+- [IPL Intelligence](https://github.com/DhanushBattu/IPL-Predictor-Analytics): analysis of 1,095 IPL matches (2008–2024) and a Flask web app that serves winner predictions from six machine-learning models. Python, Pandas, NumPy, scikit-learn, SQLite.
+
+## Skills
+
+- Languages: Java, Python, JavaScript, TypeScript, SQL, Dart, PHP, HTML, CSS
+- Frameworks and libraries: FastAPI, Flask, React, Flutter, Pandas, NumPy, scikit-learn, PyTorch, Hugging Face Transformers
+- Databases and cloud: MySQL, SQLite, Firebase
+- AI: machine learning, NLP, generative AI, LLMs, prompt engineering
+- Core CS: data structures and algorithms, OOP, DBMS, operating systems, computer networks
+
+## Education
+
+- B.E., Artificial Intelligence and Machine Learning, BMS Institute of Technology and Management, Bengaluru, 2023–2027 (expected), CGPA 8.0
+- B.Sc., Mathematics for Data Science, IIT Madras (online), 2023–present
+- Intermediate (Science), Sri Abhida (TSBIE), Telangana, 2021–2023, 92%
+- Class X (CBSE), St. Peter's Model School, Telangana
+
+## Achievements and certifications
+
+- Tech Quiz winner, Bengaluru Tech Summit, December 2023
+- IBM: Introduction to Generative AI
+- Apna College: Alpha, DSA with Java
+- Infosys Springboard: Python Fundamentals
+
+## Beyond code
+
+- Co-Head of his college's main event; operations manager for the inter-college debate tournament at Utsaha Vaibhava; expert adjudicator at institutional tournaments
+- Inline skating, and chess on Chess.com (rated 1500)
+- Based in Bengaluru, with family ties to Hyderabad

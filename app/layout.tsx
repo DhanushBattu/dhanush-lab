@@ -4,7 +4,8 @@ import "@fontsource-variable/bricolage-grotesque";
 import "@fontsource-variable/instrument-sans";
 import "@fontsource-variable/caveat";
 import "./globals.css";
-import { profile, education } from "@/content/profile";
+import { profile, education, achievements, veriai, rental, cafe, ipl, experience } from "@/content/profile";
+import { faq } from "@/content/faq";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://dhanushbattu.in";
 const title = "Dhanush Battu · Software Engineer, AI & Full-Stack";
@@ -20,7 +21,10 @@ export const metadata: Metadata = {
   authors: [{ name: profile.name, url: profile.github }],
   keywords: ["Dhanush Battu", "Battu Dhanush", "Dhanush Battu portfolio", "Software Engineer", "AI/ML", "Machine Learning", "Portfolio", "BMSIT", "IIT Madras", "Flutter", "Data Science"],
   openGraph: {
-    type: "website",
+    type: "profile",
+    firstName: "Dhanush",
+    lastName: "Battu",
+    username: "DhanushBattu",
     title,
     description,
     url: "/",
@@ -40,29 +44,79 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
+const personId = `${siteUrl}/#person`;
+const byHim = { "@id": personId };
+
 const person = {
   "@type": "Person",
-  "@id": `${siteUrl}/#person`,
+  "@id": personId,
   name: profile.name,
-  alternateName: ["Dhanush Battu", "Dhanush"],
+  alternateName: ["Dhanush Battu", "Battu Dhanush", "Dhanush"],
   givenName: "Dhanush",
   familyName: "Battu",
   url: siteUrl,
   image: `${siteUrl}/img/dhanush-hero.webp`,
+  description:
+    "Software engineer in Bengaluru, India, building full-stack web, cross-platform mobile and machine-learning applications. B.E. in Artificial Intelligence and Machine Learning at BMS Institute of Technology and Management.",
   jobTitle: "Software Development Engineer",
+  hasOccupation: { "@type": "Occupation", name: "Software Development Engineer", occupationLocation: { "@type": "City", name: "Bengaluru" } },
   email: `mailto:${profile.email}`,
   address: { "@type": "PostalAddress", addressLocality: "Bengaluru", addressRegion: "Karnataka", addressCountry: "IN" },
-  alumniOf: education.slice(0, 2).map((e) => ({ "@type": "CollegeOrUniversity", name: e.place })),
+  homeLocation: { "@type": "Place", name: "Bengaluru, Karnataka, India" },
+  alumniOf: [
+    { "@type": "CollegeOrUniversity", name: education[0].place, alternateName: "BMSIT" },
+    { "@type": "CollegeOrUniversity", name: education[1].place },
+  ],
+  award: achievements.highlight.map((a) => `${a.title.charAt(0)}${a.title.slice(1).toLowerCase()}, ${a.sub}`),
+  hasCredential: achievements.certs.map((c) => ({
+    "@type": "EducationalOccupationalCredential",
+    name: c.title,
+    credentialCategory: "certificate",
+    recognizedBy: { "@type": "Organization", name: c.name },
+  })),
   sameAs: [profile.github, profile.linkedin],
-  knowsAbout: ["Artificial Intelligence", "Machine Learning", "Python", "Data Analysis", "Flutter", "Firebase"],
+  knowsAbout: [
+    "Artificial Intelligence", "Machine Learning", "Generative AI", "Large Language Models", "Full-stack web development",
+    "Cross-platform mobile development", "Python", "Java", "JavaScript", "TypeScript", "Dart", "SQL", "FastAPI", "Flask",
+    "React", "Flutter", "Firebase", "PyTorch", "Hugging Face Transformers", "scikit-learn", "Data structures and algorithms",
+  ],
 };
+
+const code = (name: string, description: string, repo: string, langs: string[]) => ({
+  "@type": "SoftwareSourceCode",
+  name,
+  description,
+  codeRepository: repo,
+  programmingLanguage: langs,
+  author: byHim,
+});
+
+const projects = [
+  code(veriai.title, veriai.summary, profile.repos.veriai, ["Python", "TypeScript"]),
+  code("Cross-platform Rental App", rental.summary, profile.repos.rental, ["Dart"]),
+  code("IPL Intelligence", ipl.summary, profile.repos.ipl, ["Python"]),
+  { "@type": "SoftwareApplication", name: "Cyber Café Management System", description: cafe.summary, applicationCategory: "BusinessApplication", author: byHim },
+  {
+    "@type": "CreativeWork",
+    name: `${experience.org}: AI digital marketing assistant and marketing automation workflow`,
+    description: experience.points.join(". ") + ".",
+    author: byHim,
+  },
+];
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     person,
-    { "@type": "WebSite", "@id": `${siteUrl}/#website`, url: siteUrl, name: "Dhanush Battu", alternateName: "DHANUSH LAB", about: { "@id": `${siteUrl}/#person` } },
-    { "@type": "ProfilePage", url: siteUrl, name: title, mainEntity: { "@id": `${siteUrl}/#person` } },
+    { "@type": "WebSite", "@id": `${siteUrl}/#website`, url: siteUrl, name: "Dhanush Battu", alternateName: ["Battu Dhanush", "DHANUSH LAB"], inLanguage: "en-IN", about: byHim, publisher: byHim },
+    { "@type": "ProfilePage", "@id": `${siteUrl}/#profile`, url: siteUrl, name: title, description, inLanguage: "en-IN", isPartOf: { "@id": `${siteUrl}/#website` }, mainEntity: byHim, about: byHim, hasPart: projects },
+    {
+      "@type": "FAQPage",
+      "@id": `${siteUrl}/#faq`,
+      url: `${siteUrl}/#faq`,
+      about: byHim,
+      mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    },
   ],
 };
 
