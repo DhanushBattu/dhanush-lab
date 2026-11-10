@@ -32,7 +32,8 @@ jobs:
         env:
           # "/<repo-name>" for a project site, "" for <user>.github.io
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
-          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.origin }}
+          # Point link previews and the canonical URL at the main domain
+          NEXT_PUBLIC_SITE_URL: https://dhanushbattu.in
           NEXT_TELEMETRY_DISABLED: 1
       - uses: actions/upload-pages-artifact@v3
         with:
