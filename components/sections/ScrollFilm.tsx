@@ -106,7 +106,7 @@ export default function ScrollFilm() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="img/dhanush-portrait.webp"
-                alt=""
+                alt="Dhanush Battu"
                 width={1338}
                 height={1344}
                 className="h-full w-full object-contain [mask-image:radial-gradient(ellipse_70%_72%_at_50%_46%,black_62%,transparent)]"

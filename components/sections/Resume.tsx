@@ -251,7 +251,7 @@ export default function Resume() {
         <Tilt max={4} className="group mx-auto w-full max-w-[440px] rotate-[1.5deg] rounded-[3px]">
           <span className="tape -top-3 left-1/2 -translate-x-1/2 rotate-[-2deg]" />
           <button onClick={() => ui.set({ resumeOpen: true })} className="sheet relative block w-full overflow-hidden rounded-[3px] bg-white" aria-label="Open resume viewer">
-            <FadeImg src="img/resume-preview.webp" alt="" width={992} height={1403} className="block h-auto w-full" loading="lazy" />
+            <FadeImg src="img/resume-preview.webp" alt="Résumé of Dhanush Battu (Battu Dhanush)" width={992} height={1403} className="block h-auto w-full" loading="lazy" />
             <span aria-hidden className="hand absolute bottom-4 right-4 rotate-[-6deg] rounded-full border-2 border-accent bg-ink-2/90 px-3 py-0.5 text-[22px] text-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100">open it ↗</span>
           </button>
         </Tilt>
