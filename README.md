@@ -16,7 +16,7 @@ It's set up as a lab notebook: paper, pencil notes and highlighter. Each project
 | **The lab** | The five projects as cards. Each opens a full-screen room with a simulation. |
 | **Tech constellation** | A 3D map of skills. Select a star to see where it was used. |
 | **Learning and résumé** | Education timeline and a résumé viewer you can zoom (buttons, double-click, pinch or ctrl + scroll). |
-| **In short** | Eight plain questions and answers about Dhanush, from `content/faq.ts`. Written to be quoted by search engines and AI assistants. |
+| **In short** | Nine plain questions and answers about Dhanush, from `content/faq.ts`. Written to be quoted by search engines and AI assistants. |
 | **Contact** | GitHub, LinkedIn, email and the résumé. |
 | **Ask AI** | A terminal-style assistant (D-01) that answers only from `content/profile.ts`. |
 

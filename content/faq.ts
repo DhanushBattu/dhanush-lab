@@ -11,6 +11,10 @@ export const faq: Faq[] = [
     a: "Dhanush Battu (also written Battu Dhanush) is a software engineer in Bengaluru, India, who builds full-stack web, cross-platform mobile and machine-learning applications. He is studying for a B.E. in Artificial Intelligence and Machine Learning at BMS Institute of Technology and Management (BMSIT), expected to finish in 2027.",
   },
   {
+    q: "Which college is Dhanush Battu from?",
+    a: "BMS Institute of Technology and Management (BMSIT), Bengaluru, Karnataka. He is studying for a B.E. in Artificial Intelligence and Machine Learning there, 2023–2027 (expected). Alongside it he studies the online B.Sc. in Mathematics for Data Science from IIT Madras.",
+  },
+  {
     q: "What has Dhanush Battu built?",
     a: "VeriAI, his B.E. major project with a team of four, checks every claim in an AI answer against Wikipedia, Wikidata, Crossref and OpenAlex and flags wrong or made-up ones. He also built a cross-platform rental marketplace in Flutter and Firebase, a cyber café management system in PHP and MySQL, and IPL Intelligence, which analyses 1,095 IPL matches (2008–2024) and serves predictions from six machine-learning models through a Flask app.",
   },

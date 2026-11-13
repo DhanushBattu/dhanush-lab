@@ -34,7 +34,9 @@ export default function About() {
       <header className="mt-10">
         <p className="hand text-[26px]">about</p>
         <h1 className="display mt-2 text-[clamp(44px,8vw,88px)]">Dhanush Battu</h1>
-        <p className="mt-3 text-[15px] font-medium text-muted">Also written Battu Dhanush · Software Development Engineer · Bengaluru, India</p>
+        <p className="mt-3 text-[15px] font-medium text-muted">
+          Also written Battu Dhanush · Software Development Engineer · B.E. AI &amp; ML, BMS Institute of Technology and Management (BMSIT), Bengaluru
+        </p>
       </header>
 
       <section aria-labelledby="bio" className="mt-10">
@@ -43,6 +45,10 @@ export default function About() {
         </h2>
         <p className="text-[18px] leading-relaxed text-fg">{faq[0].a}</p>
         <p className="mt-4 text-[17px] leading-relaxed text-muted">{profile.summary}</p>
+        <p className="mt-4 text-[15px] leading-relaxed text-muted">
+          Other people share the name Dhanush Battu (and the similar Dhanush Battula). This page is about the software engineer
+          studying AI &amp; ML at BMSIT in Bengaluru, whose work is at dhanushbattu.in and github.com/DhanushBattu.
+        </p>
       </section>
 
       <section aria-labelledby="answers" className="mt-14">

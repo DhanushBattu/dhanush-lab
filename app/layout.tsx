@@ -47,6 +47,16 @@ export const viewport: Viewport = {
 const personId = `${siteUrl}/#person`;
 const byHim = { "@id": personId };
 
+/** His college, linked to its official site and Wikipedia so search engines can't mix it up. */
+const bmsit = {
+  "@type": "CollegeOrUniversity",
+  name: "BMS Institute of Technology and Management",
+  alternateName: ["BMSIT", "BMSIT&M", "B.M.S. Institute of Technology and Management"],
+  url: "https://bmsit.ac.in",
+  sameAs: "https://en.wikipedia.org/wiki/B.M.S._Institute_of_Technology_and_Management",
+  address: { "@type": "PostalAddress", addressLocality: "Bengaluru", addressRegion: "Karnataka", addressCountry: "IN" },
+};
+
 const person = {
   "@type": "Person",
   "@id": personId,
@@ -59,14 +69,14 @@ const person = {
   description:
     "Software engineer in Bengaluru, India, building full-stack web, cross-platform mobile and machine-learning applications. B.E. in Artificial Intelligence and Machine Learning at BMS Institute of Technology and Management.",
   jobTitle: "Software Development Engineer",
+  disambiguatingDescription:
+    "Software engineer and B.E. AI & ML student at BMS Institute of Technology and Management (BMSIT), Bengaluru. Not the same person as others named Dhanush Battu or Dhanush Battula.",
   hasOccupation: { "@type": "Occupation", name: "Software Development Engineer", occupationLocation: { "@type": "City", name: "Bengaluru" } },
   email: `mailto:${profile.email}`,
   address: { "@type": "PostalAddress", addressLocality: "Bengaluru", addressRegion: "Karnataka", addressCountry: "IN" },
   homeLocation: { "@type": "Place", name: "Bengaluru, Karnataka, India" },
-  alumniOf: [
-    { "@type": "CollegeOrUniversity", name: education[0].place, alternateName: "BMSIT" },
-    { "@type": "CollegeOrUniversity", name: education[1].place },
-  ],
+  alumniOf: [bmsit, { "@type": "CollegeOrUniversity", name: education[1].place }],
+  affiliation: bmsit,
   award: achievements.highlight.map((a) => `${a.title.charAt(0)}${a.title.slice(1).toLowerCase()}, ${a.sub}`),
   hasCredential: achievements.certs.map((c) => ({
     "@type": "EducationalOccupationalCredential",
