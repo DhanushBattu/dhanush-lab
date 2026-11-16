@@ -7,7 +7,7 @@ export type Faq = { q: string; a: string };
 
 export const faq: Faq[] = [
   {
-    q: "Who is Dhanush Battu?",
+    q: "Who is Battu Dhanush (Dhanush Battu)?",
     a: "Dhanush Battu (also written Battu Dhanush) is a software engineer in Bengaluru, India, who builds full-stack web, cross-platform mobile and machine-learning applications. He is studying for a B.E. in Artificial Intelligence and Machine Learning at BMS Institute of Technology and Management (BMSIT), expected to finish in 2027.",
   },
   {

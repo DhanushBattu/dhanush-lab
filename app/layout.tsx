@@ -8,7 +8,7 @@ import { profile, education, achievements, veriai, rental, cafe, ipl, experience
 import { faq } from "@/content/faq";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://dhanushbattu.in";
-const title = "Dhanush Battu · Software Engineer, AI & Full-Stack";
+const title = "Dhanush Battu (Battu Dhanush) · Software Engineer, AI & Full-Stack";
 const description =
   "Dhanush Battu (Battu Dhanush) is a Bengaluru software engineer building AI and full-stack systems. B.E. in AI & ML at BMSIT. Projects, résumé and contact.";
 

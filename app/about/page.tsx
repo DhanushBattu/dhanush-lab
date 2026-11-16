@@ -9,7 +9,7 @@ import { profile, education, achievements } from "@/content/profile";
  * This page is a few KB of real HTML with no client JavaScript: bio, quick answers and links.
  */
 export const metadata: Metadata = {
-  title: "About Dhanush Battu · Software Engineer in Bengaluru",
+  title: "Who is Battu Dhanush (Dhanush Battu)? · Software Engineer, BMSIT Bengaluru",
   description:
     "Who Dhanush Battu (Battu Dhanush) is: a software engineer in Bengaluru building AI and full-stack systems, studying AI & ML at BMSIT. Projects, education and contact.",
   alternates: { canonical: "/about" },
